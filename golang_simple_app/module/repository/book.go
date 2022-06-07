@@ -22,7 +22,7 @@ func NewBookRepository(db *sqlx.DB) *Book {
 
 func (br Book) Create(ctx context.Context, book entity.Book) (*entity.Book, error) {
 	bookRecord := &entity.Book{
-		Name: book.Name,
+		Name:     book.Name,
 		Category: book.Category,
 	}
 	rows, err := br.db.NamedQueryContext(ctx, `INSERT INTO books (name, category) VALUES (:name, :category) RETURNING id`, bookRecord)

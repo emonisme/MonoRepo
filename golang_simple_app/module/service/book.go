@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"encoding/json"
 
 	"github.com/julienschmidt/httprouter"
 	"simpleapp/module/entity"
@@ -31,9 +31,9 @@ func (bs Book) Create(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 	decoder := json.NewDecoder(r.Body)
 	var bookPayload entity.Book
 	err := decoder.Decode(&bookPayload)
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
 	bookCreated, err := bs.BookUsecase.Create(r.Context(), bookPayload)
 	if err != nil {
