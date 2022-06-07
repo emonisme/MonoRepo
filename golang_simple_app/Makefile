@@ -1,6 +1,6 @@
 .PHONY: all test lint compile build push
 
-export LINTER_VERSION ?= 1.46.2
+export LINTER_VERSION ?= 1.45.2
 
 IMAGE        = $(REGISTRY)/book-management
 DOCKERFILES  = $(shell cd build && find */ -name 'Dockerfile' -print)
