@@ -72,5 +72,5 @@ func (bs Book) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 func writeResponse(w http.ResponseWriter, code int, book *entity.Book) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(book)
+	_ = json.NewEncoder(w).Encode(book)
 }

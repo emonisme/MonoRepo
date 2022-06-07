@@ -1,4 +1,5 @@
 # Binaries for programs and plugins
+
 *.exe
 *.exe~
 *.dll
@@ -10,9 +11,14 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+*.xml
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
 # Local env
 *.env
+
+# Ignore config for golang_simple_app
+golang_simple_app/bin
+golang_simple_app/build/_output
