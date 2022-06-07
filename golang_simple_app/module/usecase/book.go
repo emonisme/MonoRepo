@@ -36,5 +36,5 @@ func (bu Book) Delete(ctx context.Context, id string) error {
 }
 
 func (bu Book) Get(ctx context.Context, id string) (*entity.Book, error) {
-	return nil, nil
+	return bu.BookRepo.Get(ctx, id)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"encoding/json"
 
 	"github.com/julienschmidt/httprouter"
 	"simpleapp/module/entity"
@@ -26,18 +27,36 @@ func NewBookService(usecase BookUsecase) *Book {
 	}
 }
 
-func (bs Book) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Create!\n")
+func (bs Book) Create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Fprint(w, "Create Success!\n")
 }
 
-func (bs Book) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Update!\n")
+func (bs Book) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Fprint(w, "Update Success!\n")
 }
 
-func (bs Book) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Delete!\n")
+func (bs Book) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	fmt.Fprint(w, "Delete Success!\n")
 }
 
-func (bs Book) Get(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "Get!\n")
+func (bs Book) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	strID := ps.ByName("id")
+	book, err := bs.BookUsecase.Get(r.Context(), strID)
+	if err != nil {
+		codes := http.StatusInternalServerError
+		if err.Error() == "Not Found" {
+			codes = http.StatusNotFound
+		}
+
+		http.Error(w, http.StatusText(codes), codes)
+		return
+	}
+
+	writeResponse(w, http.StatusOK, book)
+}
+
+func writeResponse(w http.ResponseWriter, code int, book *entity.Book) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(book)
 }

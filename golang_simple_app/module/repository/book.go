@@ -2,6 +2,8 @@ package repository
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -31,5 +33,15 @@ func (br Book) Delete(ctx context.Context, id string) error {
 }
 
 func (br Book) Get(ctx context.Context, id string) (*entity.Book, error) {
-	return nil, nil
+	book := entity.Book{}
+	row := br.db.QueryRowxContext(ctx, `SELECT id, name, category FROM books WHERE id = $1`, id)
+	if err := row.StructScan(&book); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.New("Not Found")
+		}
+
+		return nil, err
+	}
+
+	return &book, nil
 }

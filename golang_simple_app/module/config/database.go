@@ -10,7 +10,7 @@ type DatabaseConfig struct {
 	Port        int    `default:"5432" envconfig:"PORT"`
 	Username    string `default:"postgres" envconfig:"USERNAME"`
 	Password    string `default:"postgres" envconfig:"PASSWORD"`
-	Database    string `default:"sku_management" envconfig:"DATABASE"`
+	Database    string `default:"book_management" envconfig:"DATABASE"`
 	QueryString string `default:"sslmode=disable" envconfig:"QUERYSTRING"`
 }
 
