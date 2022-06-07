@@ -28,7 +28,21 @@ func NewBookService(usecase BookUsecase) *Book {
 }
 
 func (bs Book) Create(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprint(w, "Create Success!\n")
+	decoder := json.NewDecoder(r.Body)
+	var bookPayload entity.Book
+	err := decoder.Decode(&bookPayload)
+    if err != nil {
+        panic(err)
+    }
+
+	bookCreated, err := bs.BookUsecase.Create(r.Context(), bookPayload)
+	if err != nil {
+		codes := http.StatusInternalServerError
+		http.Error(w, http.StatusText(codes), codes)
+		return
+	}
+
+	writeResponse(w, http.StatusOK, bookCreated)
 }
 
 func (bs Book) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

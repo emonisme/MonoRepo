@@ -24,7 +24,7 @@ func NewBookUsecase(repo BookRepository) *Book {
 }
 
 func (bu Book) Create(ctx context.Context, book entity.Book) (*entity.Book, error) {
-	return nil, nil
+	return bu.BookRepo.Create(ctx, book)
 }
 
 func (bu Book) Update(ctx context.Context, book entity.Book) (*entity.Book, error) {
