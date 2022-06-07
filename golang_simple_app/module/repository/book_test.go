@@ -75,3 +75,66 @@ func TestBook_Create(t *testing.T) {
 		})
 	}
 }
+
+func TestBook_Get(t *testing.T) {
+	type args struct {
+		ctx  context.Context
+		id string
+	}
+
+	testCases := map[string]struct {
+		args    args
+		mockFn  func(sql sqlmock.Sqlmock, args args)
+		want    *entity.Book
+		wantErr error
+	}{
+		"success": {
+			args: args{
+				ctx:  context.Background(),
+				id: "1",
+			},
+			mockFn: func(sql sqlmock.Sqlmock, args args) {
+				column := []string{"id", "name", "category"}
+				row := sql.NewRows(column).AddRow(1, "book1", "category1")
+				sql.ExpectQuery(regexp.QuoteMeta("SELECT id, name, category FROM books WHERE id = $1")).
+					WithArgs(args.id).
+					WillReturnRows(row)
+			},
+			want:    &entity.Book{ID: "1", Name: "book1", Category: "category1"},
+			wantErr: nil,
+		},
+		"failed": {
+			args: args{
+				ctx:  context.Background(),
+				id: "1",
+			},
+			mockFn: func(sql sqlmock.Sqlmock, args args) {
+				sql.ExpectQuery(regexp.QuoteMeta("SELECT id, name, category FROM books WHERE id = $1")).
+					WithArgs(args.id).
+					WillReturnError(errors.New("database error"))
+			},
+			want:    nil,
+			wantErr: errors.New("database error"),
+		},
+	}
+
+	for name, tc := range testCases {
+		t.Run(name, func(t *testing.T) {
+			mockDB, sMock, _ := sqlmock.New()
+			sqlxDB := sqlx.NewDb(mockDB, "sqlmock")
+
+			bookRepo := repository.NewBookRepository(sqlxDB)
+
+			tc.mockFn(sMock, tc.args)
+			actual, err := bookRepo.Get(tc.args.ctx, tc.args.id)
+			if tc.wantErr != nil {
+				assert.Nil(t, actual)
+				assert.Equal(t, tc.wantErr.Error(), err.Error())
+				return
+			}
+
+			assert.Nil(t, err)
+			assert.Equal(t, tc.want, actual)
+		})
+	}
+}
