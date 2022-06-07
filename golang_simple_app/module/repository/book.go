@@ -1,18 +1,12 @@
-package book
+package repository
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"simpleapp/module/entity"
 )
-
-type BookObject struct {
-	ID       string `db:"id"`
-	Name     string `db:"name"`
-	Category string `db:"category"`
-}
 
 type Book struct {
 	db *sqlx.DB
@@ -24,18 +18,18 @@ func NewBookRepository(db *sqlx.DB) *Book {
 	}
 }
 
-func (br *Book) Create(ctx Context, obj BookObject) (*BookObject, error) {
-	return nil, err
+func (br Book) Create(ctx context.Context, book entity.Book) (*entity.Book, error) {
+	return nil, nil
 }
 
-func (br *Book) Update(ctx Context, obj BookObject) (*BookObject, error) {
-	return nil, err
+func (br Book) Update(ctx context.Context, book entity.Book) (*entity.Book, error) {
+	return nil, nil
 }
 
-func (br *Book) Delete(ctx Context, id int) error {
-	return err
+func (br Book) Delete(ctx context.Context, id string) error {
+	return nil
 }
 
-func (br *Book) Get(ctx Context, id int) (*BookObject, error) {
-	return nil, err
+func (br Book) Get(ctx context.Context, id string) (*entity.Book, error) {
+	return nil, nil
 }
