@@ -1,5 +1,5 @@
 
-name: test-lint
+name: go-test-lint
 on:
   push:
     paths:

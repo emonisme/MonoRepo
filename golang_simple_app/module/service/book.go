@@ -46,11 +46,11 @@ func (bs Book) Create(w http.ResponseWriter, r *http.Request, ps httprouter.Para
 }
 
 func (bs Book) Update(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprint(w, "Update Success!\n")
+	fmt.Fprint(w, "Update Success! \n")
 }
 
 func (bs Book) Delete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	fmt.Fprint(w, "Delete Success!\n")
+	fmt.Fprint(w, "Delete Success! \n")
 }
 
 func (bs Book) Get(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
