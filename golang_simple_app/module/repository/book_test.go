@@ -78,8 +78,8 @@ func TestBook_Create(t *testing.T) {
 
 func TestBook_Get(t *testing.T) {
 	type args struct {
-		ctx  context.Context
-		id string
+		ctx context.Context
+		id  string
 	}
 
 	testCases := map[string]struct {
@@ -90,8 +90,8 @@ func TestBook_Get(t *testing.T) {
 	}{
 		"success": {
 			args: args{
-				ctx:  context.Background(),
-				id: "1",
+				ctx: context.Background(),
+				id:  "1",
 			},
 			mockFn: func(sql sqlmock.Sqlmock, args args) {
 				column := []string{"id", "name", "category"}
@@ -105,8 +105,8 @@ func TestBook_Get(t *testing.T) {
 		},
 		"failed": {
 			args: args{
-				ctx:  context.Background(),
-				id: "1",
+				ctx: context.Background(),
+				id:  "1",
 			},
 			mockFn: func(sql sqlmock.Sqlmock, args args) {
 				sql.ExpectQuery(regexp.QuoteMeta("SELECT id, name, category FROM books WHERE id = $1")).
