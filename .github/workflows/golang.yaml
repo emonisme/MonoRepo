@@ -1,0 +1,92 @@
+
+name: golang
+on:
+  push:
+    paths:
+      - "golang_simple_app/"
+  release:
+    types: [created]
+  pull_request:
+
+jobs:
+  go-test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18.x
+      - name: go test
+        working-directory: ./golang_simple_app
+        run: go test -v ./...
+
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18.x
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3.2.0
+        with:
+          version: v1.45.2
+          working-directory: golang_simple_app
+
+  compile:
+    needs: [go-test, golangci]
+    name: compile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18.x
+      - name: compile
+        working-directory: ./golang_simple_app
+        run: make compile
+      - name: upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: output-compile
+          path: ./golang_simple_app/build/_output
+
+  build-push:
+    runs-on: ubuntu-latest
+    needs: compile
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download compile artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: output-compile
+          path: ./golang_simple_app/build/_output
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: set outputs
+        shell: bash
+        run: echo "::set-output name=sha_short::$(git rev-parse --short ${{ github.event.pull_request.head.sha }})"
+
+      - name: Build and Push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./golang_simple_app
+          file: ./golang_simple_app/build/rest/Dockerfile
+          push: true
+          tags: yusufemon/book-management-rest:${{ github.event.pull_request.head.sha }}
