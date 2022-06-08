@@ -14,6 +14,13 @@ export VERSION      ?= $(shell git show -q --format=%h)
 export VAR_SERVICES ?= $(foreach path, $(DOCKERFILES), $(path:%/Dockerfile=%))
 export REGISTRY     ?= yusufemon
 
+# Default postgres migration settings
+export POSTGRES_USER ?= postgres
+export POSTGRES_PASS ?= postgres
+export POSTGRES_HOST ?= localhost
+export POSTGRES_PORT ?= 5432
+export POSTGRES_QUERYSTRING ?= sslmode=disable
+
 all: check test
 
 tool-lint:
@@ -21,6 +28,24 @@ tool-lint:
 
 lint: tool-lint
 	./bin/golangci-lint run -v --timeout 3m0s
+
+bin:
+	@mkdir -p bin
+
+tool-migrate: bin
+ifeq ($(UNAME), Linux)
+	@curl -sSfL https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar zxf - --directory /tmp \
+	&& cp /tmp/migrate bin/
+else ifeq ($(UNAME), Darwin)
+	@curl -sSfL https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.darwin-amd64.tar.gz | tar zxf - --directory /tmp \
+	&& cp /tmp/migrate bin/
+else
+	@echo "Your OS is not supported."
+endif
+
+migrate:
+	@cp module/db/migrations/*.sql $(TMP_DIR)
+	@bin/migrate -source file://$(TMP_DIR) -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASS)@$(POSTGRES_HOST):$(POSTGRES_PORT)/sku_management?$(POSTGRES_QUERYSTRING)" $(MIGRATE_ARGS)
 
 test:
 	@go test -race -v ${GO_PACKAGES}

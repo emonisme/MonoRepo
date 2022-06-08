@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS books
+(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+);
