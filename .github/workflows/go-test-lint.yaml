@@ -65,10 +65,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: compile
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
       - name: Download compile artifact
         uses: actions/download-artifact@v3
         with:
           name: output-compile
+          path: ./golang_simple_app/build/_output
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
