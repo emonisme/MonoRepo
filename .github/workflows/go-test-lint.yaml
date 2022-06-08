@@ -56,7 +56,7 @@ jobs:
         working-directory: ./golang_simple_app
         run: make compile
       - name: upload artifact
-        uses: actions/cache@v3
+        uses: actions/upload-artifact@v3
         with:
           name: output-compile
           path: ./golang_simple_app/build/_output
