@@ -1,13 +1,9 @@
 
-name: go-test-lint
+name: golang
 on:
   push:
     paths:
-      - "golang_simple_app/go.sum"
-      - "golang_simple_app/go.mod"
-      - "golang_simple_app/**.go"
-      - ".github/workflows/golangci-lint.yml"
-      - "golang_simple_app/.golangci.yml"
+      - "golang_simple_app/"
   release:
     types: [created]
   pull_request:
