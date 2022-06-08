@@ -75,13 +75,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: set outputs
-        shell: bash
-        run: echo "::set-output name=sha_short::$(git rev-parse --short ${{ github.event.pull_request.head.sha }})"
-
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
           context: ./golang_simple_app/build/rest
           push: true
-          tags: yusufemon/book-management-rest:${{ steps.vars.outputs.sha_short }}
+          tags: yusufemon/book-management-rest:${{ github.event.pull_request.head.sha }}
