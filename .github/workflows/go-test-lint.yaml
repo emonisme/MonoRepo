@@ -88,6 +88,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./golang_simple_app
-          file: build/rest/Dockerfile
+          file: ./golang_simple_app/build/rest/Dockerfile
           push: true
           tags: yusufemon/book-management-rest:${{ github.event.pull_request.head.sha }}
