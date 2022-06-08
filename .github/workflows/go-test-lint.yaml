@@ -42,7 +42,7 @@ jobs:
           working-directory: golang_simple_app
 
   compile:
-    need: [go-test, golangci]
+    needs: [go-test, golangci]
     name: compile
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
           path: ./golang_simple_app/build/_output
 
   build-push:
-    need: compile
+    needs: compile
     steps:
       - name: Download compile artifact
         uses: actions/download-artifact@v3
