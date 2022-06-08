@@ -62,6 +62,7 @@ jobs:
           path: ./golang_simple_app/build/_output
 
   build-push:
+    runs-on: ubuntu-latest
     needs: compile
     steps:
       - name: Download compile artifact
@@ -74,6 +75,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: set outputs
+        shell: bash
+        run: echo "::set-output name=sha_short::$(git rev-parse --short ${{ github.event.pull_request.head.sha }})"
 
       - name: Build and Push
         uses: docker/build-push-action@v3
