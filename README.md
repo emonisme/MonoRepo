@@ -22,7 +22,7 @@ v0.0.1
 
 # Deployments
 
-Before you deploy your microservices to kubernetes, make sure to create kubernetes manifest using Helm. This will create manifest template to deploy it to kubernetes
+Before you deploy your microservices to kubernetes, make sure to create kubernetes manifest using Helm (install it with this [guide](https://helm.sh/docs/intro/install/)). This will create manifest template to deploy it to kubernetes
 ```
 cd helm-charts
 helm create charts/[[your_awsome_repository]]
