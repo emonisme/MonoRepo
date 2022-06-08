@@ -11,7 +11,11 @@ on:
   push:
     paths:
       - "golang_simple_app/"
-      - "your_awsome_repository/"
+      - "your_awsome_repository/" # add this
+  pull_request:
+    paths:
+      - "golang_simple_app/"
+      - "your_awsome_repository/" # add this
 ```
 
 ## Build-Push Image
