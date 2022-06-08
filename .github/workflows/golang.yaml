@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - "golang_simple_app/"
+  pull_request:
+    paths:
+      - "golang_simple_app/"
   release:
     types: [created]
-  pull_request:
 
 jobs:
   go-test:
