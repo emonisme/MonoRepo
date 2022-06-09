@@ -22,7 +22,6 @@ on:
 
 Once your repository connected with github actions. You can build-push your image to registry by creating tag with prefix `v`. For example
 > v1.0.0
-v0.0.1
 
 # Deployments
 
