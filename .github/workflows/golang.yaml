@@ -1,9 +1,6 @@
 
 name: golang
 on:
-  push:
-    paths:
-      - "golang_simple_app/**"
   pull_request:
     paths:
       - "golang_simple_app/**"
