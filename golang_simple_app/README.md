@@ -8,12 +8,15 @@ golang_simple_app is a book management backend microservice. It handles CRUD boo
 ```
 make docker up
 ```
+- Download database migration tools
+```
 make tool-migrate
 ```
-- Run migration for each module. See makefile for custom database env config. Also see more argument on [golang-migrate](https://github.com/golang-migrate/migrate)
+- Run migration. See makefile for custom database env config. Also see more argument on [golang-migrate](https://github.com/golang-migrate/migrate)
 ```
 MIGRATE_ARGS=up make migrate
 ```
 - Run golang main on cmd
 ```
 go run cmd/rest/main.go
+```
